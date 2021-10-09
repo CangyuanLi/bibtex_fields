@@ -247,6 +247,7 @@ def clean_and_split(field: str) -> list:
 def escape_latex_chars(field: str) -> str:
     return None
 
+
 with open(base_path / "test_files/cl_sg_bib.bib", encoding="utf8") as bib:
     bib_db = bibtexparser.load(bib)
 
