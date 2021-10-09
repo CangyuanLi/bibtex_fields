@@ -1,0 +1,115 @@
+{
+    "article": {
+        "required": [
+            "author",
+            "journal",
+            "year",
+            "title"
+        ],
+        "optional": [
+            "number",
+            "pages",
+            "volume",
+            "note"
+        ]
+    },
+    "book": {
+        "required": [
+            "author",
+            "editor",
+            "publisher",
+            "booktitle"
+        ],
+        "optional": [
+
+        ]
+    },
+    "booklet": {
+        "required": [
+
+        ],
+        "optional": [
+            
+        ]
+    },
+    "inbook": {
+        "required": [
+
+        ],
+        "optional": [
+            
+        ]
+    },
+    "incollection": {
+        "required": [
+
+        ],
+        "optional": [
+            
+        ]
+    },
+    "inproceedings": {
+        "required": [
+
+        ],
+        "optional": [
+            
+        ]
+    },
+    "mastersthesis": {
+        "required": [
+
+        ],
+        "optional": [
+            
+        ]
+    },
+    "manual": {
+        "required": [
+
+        ],
+        "optional": [
+            
+        ]
+    },
+    "misc": {
+        "required": [
+
+        ],
+        "optional": [
+            
+        ]
+    },
+    "phdthesis": {
+        "required": [
+
+        ],
+        "optional": [
+            
+        ]
+    },
+    "proceedings": {
+        "required": [
+
+        ],
+        "optional": [
+            
+        ]
+    },
+    "techreport": {
+        "required": [
+
+        ],
+        "optional": [
+            
+        ]
+    },
+    "unpublished": {
+        "required": [
+
+        ],
+        "optional": [
+            
+        ]
+    }
+}
