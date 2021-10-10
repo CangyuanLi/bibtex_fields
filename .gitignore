@@ -16,12 +16,17 @@
 **.Rhistory
 
 **.dct
-**.log
 **.aux
+**.bbl
+**.blg
+**.fdb_latexmk
+**.fls
+**.synctex.gz
+**.log
 
 **.docx
 **.ppt
-**.xlsx
 **.xls
+**.xlsx
 
 **/*-checkpoint*
