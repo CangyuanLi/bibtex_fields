@@ -167,5 +167,11 @@
         "optional": [
             "note"
         ]
-    }
+    },
+    "FIELDS_TO_TITLECASE": [
+        "booktitle",
+        "journal",
+        "publisher",
+        "title"
+    ]
 }
