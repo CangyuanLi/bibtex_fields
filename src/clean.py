@@ -222,6 +222,7 @@ acronyms = {
     "tsa",
     "tsr",
     "ucla",
+    "us",
     "usa",
     "wc",
     "ytd",
