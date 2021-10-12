@@ -235,11 +235,35 @@ fields = {
     "title"
 }
 
+duplicate_entries = []
 invalid_entry_types = []
 invalid_fields = []
 missing_required_fields = []
 
 # functions
+
+def combine_duplicate_entries(bib: list) -> list:
+    new_bib = []
+    entry_positions = dict()
+    for idx, entry in enumerate(bib):
+        if entry["ID"] in entry_positions.keys():
+            entry_positions[entry["ID"]].append(idx)
+        else:
+            entry_positions[entry["ID"]] = [idx]
+    
+    for k, v in entry_positions.items():
+        num_occurences = len(v)
+        if num_occurences > 1:
+            for i in v[1:num_occurences - 1]:
+                bib[v[0]].update(bib[i])
+            new_bib.append(bib[v[0]])
+
+            duplicate_report = f"  -{k} occured {num_occurences} times. Automatically merged."
+            duplicate_entries.append(duplicate_report)
+        else:
+            new_bib.append(bib[v[0]])
+    
+    return new_bib
 
 def is_article(word: str) -> bool:
     if word in articles:
@@ -309,14 +333,14 @@ def validate_entry(style_dict: dict, entry: dict) -> None:
             missing_fields = set(required_fields) - set(intersection)
 
             missing_str1 = ", ".join(missing_fields)
-            missing_str2 = f"-{entry_name} is missing {missing_str1}"
+            missing_str2 = f"  -{entry_name} is missing {missing_str1}"
             missing_required_fields.append(missing_str2)
 
         invalid_temp = [base_field for base_field in base_fields if base_field not in all_style_fields]
 
         if len(invalid_temp) != 0:
             invalid_str1 = ", ".join(invalid_temp)
-            invalid_str2 = f"-{entry_name} has invalid fields {invalid_str1}"
+            invalid_str2 = f"  -{entry_name} has invalid fields {invalid_str1}"
             invalid_fields.append(invalid_str2)
 
     except KeyError:
@@ -325,11 +349,24 @@ def validate_entry(style_dict: dict, entry: dict) -> None:
     return None
 
 def gen_report() -> None:
+    num_duplicate_entries = len(duplicate_entries)
     num_invalid_entries = len(invalid_entry_types)
     num_invalid_fields = len(invalid_fields)
     num_missing_req_fields = len(missing_required_fields)
 
-    if num_invalid_entries != 0:
+    if num_duplicate_entries > 0:
+        header_box = ""
+        for _ in range(0, len("*Found entries that are not valid entry types.*") + len(str(num_duplicate_entries)) + 1):
+            header_box += "*"
+
+        print(header_box)
+        header = f"*Found and merged {num_duplicate_entries} duplicate entries.*"
+        print(header)
+        print(header_box)
+        for out in duplicate_entries:
+            print(out)
+
+    if num_invalid_entries > 0:
         header_box = ""
         for _ in range(0, len("*Found entries that are not valid entry types.*") + len(str(num_invalid_entries)) + 1):
             header_box += "*"
@@ -341,7 +378,7 @@ def gen_report() -> None:
         for out in invalid_entry_types:
             print(out)
 
-    if num_missing_req_fields != 0:
+    if num_missing_req_fields > 0:
         header_box = ""
         for _ in range(0, len("*Found entries that are missing required fields.*") + len(str(num_missing_req_fields)) + 1):
             header_box += "*"
@@ -353,7 +390,7 @@ def gen_report() -> None:
         for out in missing_required_fields:
             print(out)
     
-    if num_invalid_fields != 0:
+    if num_invalid_fields > 0:
         header_box = ""
         for _ in range(0, len("*Found entries with invalid fields.*") + len(str(num_invalid_fields)) + 1):
             header_box += "*"
@@ -372,9 +409,12 @@ with open(base_path / "test_files/cl_sg_bib.bib", encoding="utf8") as bib:
     bib_db = bibtexparser.load(bib)
 
 style_dict, fields_to_titlecase = open_style_guide("aer")
+bib_db.entries = combine_duplicate_entries(bib_db.entries)
 
 for entry in bib_db.entries:
     validate_entry(style_dict=style_dict, entry=entry)
+    entry["ID"] = entry["ID"].lower()
+    entry["ENTRYTYPE"] = entry["ENTRYTYPE"].lower()
 
     for field in fields_to_titlecase:
         try:
