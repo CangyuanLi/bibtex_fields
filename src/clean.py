@@ -240,6 +240,26 @@ invalid_entry_types = []
 invalid_fields = []
 missing_required_fields = []
 
+# parser
+
+parser = argparse.ArgumentParser(description="Clean bibtex file")
+parser.add_argument(
+    "filepath",
+    type=str,
+    nargs=1,
+    required=False,
+    help="path to bibtex file"
+)
+parser.add_argument(
+    "-q",
+    type=bool,
+    nargs=1,
+    required=False,
+    help="suppresses output"
+)
+
+args = parser.parse_args()
+
 # functions
 
 def combine_duplicate_entries(bib: list) -> list:
@@ -348,103 +368,92 @@ def validate_entry(style_dict: dict, entry: dict) -> None:
 
     return None
 
+def print_results(header: str, outlist: int, sep: str="*") -> None:
+    length = len(outlist)
+    if length > 0:
+        header_box = ""
+        for _ in range(0, len(header) + 2 - 3 + len(str(length)) + 1):
+            header_box += sep
+
+        print(header_box)
+        print(sep + header.format(length) + sep)
+        print(header_box)
+
+        for out in outlist:
+            print(out)
+
+        print("\n")
+
+    return None
+
 def gen_report() -> None:
-    num_duplicate_entries = len(duplicate_entries)
-    num_invalid_entries = len(invalid_entry_types)
-    num_invalid_fields = len(invalid_fields)
-    num_missing_req_fields = len(missing_required_fields)
+    print_results(
+        header="Found and merged {} duplicate entries.",
+        outlist=duplicate_entries,
+    )
 
-    if num_duplicate_entries > 0:
-        header_box = ""
-        for _ in range(0, len("*Found entries that are not valid entry types.*") + len(str(num_duplicate_entries)) + 1):
-            header_box += "*"
+    print_results(
+        header="Found {} entries that are not valid entry types.",
+        outlist=invalid_entry_types
+    )
 
-        print(header_box)
-        header = f"*Found and merged {num_duplicate_entries} duplicate entries.*"
-        print(header)
-        print(header_box)
-        for out in duplicate_entries:
-            print(out)
+    print_results(
+        header="Found {} entries that are missing required fields.",
+        outlist=missing_required_fields
+    )
 
-    if num_invalid_entries > 0:
-        header_box = ""
-        for _ in range(0, len("*Found entries that are not valid entry types.*") + len(str(num_invalid_entries)) + 1):
-            header_box += "*"
-
-        print(header_box)
-        header = f"*Found {num_invalid_entries} entries that are not valid entry types.*"
-        print(header)
-        print(header_box)
-        for out in invalid_entry_types:
-            print(out)
-
-    if num_missing_req_fields > 0:
-        header_box = ""
-        for _ in range(0, len("*Found entries that are missing required fields.*") + len(str(num_missing_req_fields)) + 1):
-            header_box += "*"
-        print("\n")
-        print(header_box)
-        header = f"*Found {num_missing_req_fields} entries that are missing required fields.*"
-        print(header)
-        print(header_box)
-        for out in missing_required_fields:
-            print(out)
-    
-    if num_invalid_fields > 0:
-        header_box = ""
-        for _ in range(0, len("*Found entries with invalid fields.*") + len(str(num_invalid_fields)) + 1):
-            header_box += "*"
-        print("\n")
-        print(header_box)
-        header = f"*Found {num_invalid_fields} entries with invalid fields.*"
-        print(header)
-        print(header_box)
-        for out in invalid_fields:
-            print(out)
+    print_results(
+        header="Found {} entries with invalid fields.",
+        outlist=invalid_fields
+    )
     
 def escape_latex_chars(field: str) -> str:
     return None
 
-with open(base_path / "test_files/cl_sg_bib.bib", encoding="utf8") as bib:
-    bib_db = bibtexparser.load(bib)
+def main():
+    with open(base_path / "test_files/cl_sg_bib.bib", encoding="utf8") as bib:
+        bib_db = bibtexparser.load(bib)
 
-style_dict, fields_to_titlecase = open_style_guide("aer")
-bib_db.entries = combine_duplicate_entries(bib_db.entries)
+    style_dict, fields_to_titlecase = open_style_guide("aer")
+    bib_db.entries = combine_duplicate_entries(bib_db.entries)
 
-for entry in bib_db.entries:
-    validate_entry(style_dict=style_dict, entry=entry)
-    entry["ID"] = entry["ID"].lower()
-    entry["ENTRYTYPE"] = entry["ENTRYTYPE"].lower()
+    for entry in bib_db.entries:
+        entry["ID"] = entry["ID"].lower()
+        entry["ENTRYTYPE"] = entry["ENTRYTYPE"].lower()
+        validate_entry(style_dict=style_dict, entry=entry)
 
-    for field in fields_to_titlecase:
-        try:
-            field_content = entry[field]
-        except KeyError:
-            continue
-        
-        word_list = clean_and_split(field_content)
-
-        corrected_list = []
-        for idx, word in enumerate(word_list):
-            if is_article(word) or is_conjuction(word) or is_preposition(word):
-                correct_word = word.lower()
-            else:
-                correct_word = word.title()
-
-            if idx in {0, len(word_list) - 1} or word_list[idx - 1][-1] in {":", "?", "!", ".", "--"}:
-                correct_word = word.title()
-            if is_acronym(word):
-                correct_word = word.upper()
-            if "-" in word:
-                dash_pos = word.index("-")
-                correct_word = word[:dash_pos + 1].title() + word[dash_pos + 1].lower() + word[dash_pos + 2:]
+        for field in fields_to_titlecase:
+            try:
+                field_content = entry[field]
+            except KeyError:
+                continue
             
-            corrected_list.append(correct_word)
-            
-        correct_field = " ".join(corrected_list)
-        entry.update({field: correct_field})
+            word_list = clean_and_split(field_content)
 
-gen_report()
+            corrected_list = []
+            for idx, word in enumerate(word_list):
+                if is_article(word) or is_conjuction(word) or is_preposition(word):
+                    correct_word = word.lower()
+                else:
+                    correct_word = word.title()
 
-with open(base_path / "cl_sg_corrected.bib", "w", encoding="utf8") as f:
-    bibtexparser.dump(bib_db, f)
+                if idx in {0, len(word_list) - 1} or word_list[idx - 1][-1] in {":", "?", "!", ".", "--"}:
+                    correct_word = word.title()
+                if is_acronym(word):
+                    correct_word = word.upper()
+                if "-" in word:
+                    dash_pos = word.index("-")
+                    correct_word = word[:dash_pos + 1].title() + word[dash_pos + 1].lower() + word[dash_pos + 2:]
+                
+                corrected_list.append(correct_word)
+                
+            correct_field = " ".join(corrected_list)
+            entry.update({field: correct_field})
+
+    gen_report()
+
+    with open(base_path / "cl_sg_corrected.bib", "w", encoding="utf8") as f:
+        bibtexparser.dump(bib_db, f)
+
+if __name__ == "__main__":
+    main()
