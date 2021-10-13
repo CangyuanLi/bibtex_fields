@@ -242,23 +242,23 @@ missing_required_fields = []
 
 # parser
 
-parser = argparse.ArgumentParser(description="Clean bibtex file")
-parser.add_argument(
-    "filepath",
-    type=str,
-    nargs=1,
-    required=False,
-    help="path to bibtex file"
-)
-parser.add_argument(
-    "-q",
-    type=bool,
-    nargs=1,
-    required=False,
-    help="suppresses output"
-)
+# parser = argparse.ArgumentParser(description="Clean bibtex file")
+# parser.add_argument(
+#     "filepath",
+#     type=str,
+#     nargs=1,
+#     required=False,
+#     help="path to bibtex file"
+# )
+# parser.add_argument(
+#     "-q",
+#     type=bool,
+#     nargs=1,
+#     required=False,
+#     help="suppresses output"
+# )
 
-args = parser.parse_args()
+# args = parser.parse_args()
 
 # functions
 
@@ -379,7 +379,7 @@ def print_results(header: str, outlist: int, sep: str="*") -> None:
         print(sep + header.format(length) + sep)
         print(header_box)
 
-        for out in outlist:
+        for out in sorted(outlist):
             print(out)
 
         print("\n")
