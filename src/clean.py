@@ -143,7 +143,6 @@ prepositions = {
 acronyms = {
     "aer",
     "qje",
-    "jf",
     "jel",
     "jpe",
     "jfe",
