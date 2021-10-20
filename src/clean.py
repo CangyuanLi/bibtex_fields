@@ -3,6 +3,7 @@
 import argparse
 import json
 from pathlib import Path
+import string
 
 import bibtexparser
 
@@ -137,18 +138,26 @@ prepositions = {
 
 acronyms = {
     "aer",
+    "qje",
+    "jf",
+    "jel",
+    "jpe",
+    "jfe",
+    "jstor",
+    "nber",
+    "qje",
+    "qtd",
+    "qte",
+    "ssrn",
+    "usa",
     "adtv",
     "amex",
-    "ap",
     "apr",
     "arm",
     "bea",
-    "ca",
     "cagr",
     "cao",
     "capex",
-    "cb",
-    "cd",
     "cfa",
     "cfm",
     "cfo",
@@ -175,9 +184,6 @@ acronyms = {
     "gnp",
     "ipo",
     "ira",
-    "jf",
-    "jfe",
-    "jstor",
     "llc",
     "loi",
     "mlb",
@@ -187,7 +193,6 @@ acronyms = {
     "nasdaq",
     "nav",
     "nba",
-    "nber",
     "ncnd",
     "nda",
     "neer",
@@ -195,16 +200,10 @@ acronyms = {
     "nsa",
     "nyse",
     "nyu",
-    "p&l",
-    "p/e",
-    "pe",
     "pfd",
     "ppp",
     "ppplf",
     "psp",
-    "qje",
-    "qtd",
-    "qte",
     "rbi",
     "reit",
     "roa",
@@ -218,21 +217,38 @@ acronyms = {
     "sbo",
     "sec",
     "siv",
-    "ssrn",
     "tsa",
     "tsr",
     "ucla",
-    "us",
-    "usa",
-    "wc",
     "ytd",
     "ytm"
 }
 
-fields = {
-    "booktitle",
-    "journal",
-    "title"
+valid_two_letter_words = {
+    "am",
+    "an",
+    "as",
+    "at",
+    "be",
+    "by",
+    "do",
+    "he",
+    "if",
+    "in",
+    "is",
+    "it",
+    "me",
+    "my",
+    "of",
+    "on",
+    "or",
+    "ox",
+    "pi",
+    "so",
+    "to",
+    "up",
+    "us",
+    "we"
 }
 
 duplicate_entries = []
@@ -242,25 +258,26 @@ missing_required_fields = []
 
 # parser
 
-# parser = argparse.ArgumentParser(description="Clean bibtex file")
-# parser.add_argument(
-#     "filepath",
-#     type=str,
-#     nargs=1,
-#     required=False,
-#     help="path to bibtex file"
-# )
-# parser.add_argument(
-#     "-q",
-#     type=bool,
-#     nargs=1,
-#     required=False,
-#     help="suppresses output"
-# )
+parser = argparse.ArgumentParser(description="Clean bibtex file")
+parser.add_argument(
+    "filepath",
+    type=str,
+    help="path to bibtex file"
+)
+parser.add_argument(
+    "-q",
+    "--quiet",
+    action="store_true",
+    required=False,
+    help="suppresses output"
+)
 
-# args = parser.parse_args()
+args = parser.parse_args()
 
 # functions
+
+def contains(string: str, elements: set) -> bool:
+    return any(elem in string for elem in elements)
 
 def combine_duplicate_entries(bib: list) -> list:
     new_bib = []
@@ -310,10 +327,22 @@ def between_parantheses(word: str) -> bool:
         return False
 
 def is_acronym(word: str) -> bool:
-    if word in acronyms or "." in word or between_parantheses(word):
+    word_no_punc = word.translate(string.punctuation)
+    if (
+        word_no_punc in acronyms or 
+        contains(word, {"&", "/"}) or
+        between_parantheses(word) or
+        len(word_no_punc) == 2 and word_no_punc not in valid_two_letter_words
+    ):
         return True
     else:
         return False
+
+def lowercase_after_dash(word: str, dash_pos: int):
+    before_dash = word[:dash_pos + 1].title()
+    after_dash = word[dash_pos + 2:]
+    
+    return before_dash + word[dash_pos + 1].lower() + after_dash
 
 def clean_and_split(field: str) -> list:
     field = field.strip() # strip whitespace off ends
@@ -371,9 +400,7 @@ def validate_entry(style_dict: dict, entry: dict) -> None:
 def print_results(header: str, outlist: int, sep: str="*") -> None:
     length = len(outlist)
     if length > 0:
-        header_box = ""
-        for _ in range(0, len(header) + 2 - 3 + len(str(length)) + 1):
-            header_box += sep
+        header_box = sep * (len(header) + 2 - 3 + len(str(length)) + 1)
 
         print(header_box)
         print(sep + header.format(length) + sep)
@@ -410,8 +437,8 @@ def gen_report() -> None:
 def escape_latex_chars(field: str) -> str:
     return None
 
-def main():
-    with open(base_path / "test_files/cl_sg_bib.bib", encoding="utf8") as bib:
+def main(filepath=args.filepath, quiet=args.quiet):
+    with open(filepath, encoding="utf8") as bib:
         bib_db = bibtexparser.load(bib)
 
     style_dict, fields_to_titlecase = open_style_guide("aer")
@@ -443,17 +470,20 @@ def main():
                     correct_word = word.upper()
                 if "-" in word:
                     dash_pos = word.index("-")
-                    correct_word = word[:dash_pos + 1].title() + word[dash_pos + 1].lower() + word[dash_pos + 2:]
+                    correct_word = lowercase_after_dash(word, dash_pos)
                 
                 corrected_list.append(correct_word)
                 
             correct_field = " ".join(corrected_list)
             entry.update({field: correct_field})
 
-    gen_report()
-
-    with open(base_path / "cl_sg_corrected.bib", "w", encoding="utf8") as f:
+    newfilename = f"{Path(filepath).stem}_cleaned.bib"
+    newpath = Path(filepath).parent / newfilename
+    with open(newpath, "w", encoding="utf8") as f:
         bibtexparser.dump(bib_db, f)
+
+    if quiet == False:
+        gen_report()
 
 if __name__ == "__main__":
     main()
