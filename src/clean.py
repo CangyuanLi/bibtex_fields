@@ -308,7 +308,7 @@ def combine_duplicate_entries(bib: list) -> list:
                 bib[v[0]].update(bib[i])
             new_bib.append(bib[v[0]])
 
-            duplicate_report = f"  -{Fore.CYAN}{k} {Style.RESET_ALL}occured {Fore.YELLOW}{num_occurences} {Style.RESET_ALL}times. Automatically merged."
+            duplicate_report = f"  {Fore.CYAN}{k} {Style.RESET_ALL}occured {Fore.YELLOW}{num_occurences} {Style.RESET_ALL}times. Automatically merged."
             duplicate_entries.append(duplicate_report)
         else:
             new_bib.append(bib[v[0]])
@@ -395,18 +395,18 @@ def validate_entry(style_dict: dict, entry: dict) -> None:
             missing_fields = set(required_fields) - set(intersection)
 
             missing_str1 = ", ".join(missing_fields)
-            missing_str2 = f"  -{Fore.CYAN}{entry_name} {Style.RESET_ALL}is missing {Fore.LIGHTMAGENTA_EX}{missing_str1}"
+            missing_str2 = f"  {Fore.CYAN}{entry_name} {Style.RESET_ALL}is missing {Fore.LIGHTMAGENTA_EX}{missing_str1}"
             missing_required_fields.append(missing_str2)
 
         invalid_temp = [base_field for base_field in base_fields if base_field not in all_style_fields]
 
         if len(invalid_temp) != 0:
             invalid_str1 = ", ".join(invalid_temp)
-            invalid_str2 = f"  -{Fore.CYAN}{entry_name} {Style.RESET_ALL}has invalid fields {Fore.LIGHTMAGENTA_EX}{invalid_str1}"
+            invalid_str2 = f"  {Fore.CYAN}{entry_name} {Style.RESET_ALL}has invalid fields {Fore.LIGHTMAGENTA_EX}{invalid_str1}"
             invalid_fields.append(invalid_str2)
 
     except KeyError:
-        invalid_entry_types.append(f"-{field_id} is not a valid entry type")
+        invalid_entry_types.append(f"  {field_id} is not a valid entry type")
 
     return None
 
