@@ -327,7 +327,7 @@ def between_parantheses(word: str) -> bool:
         return False
 
 def is_acronym(word: str) -> bool:
-    word_no_punc = word.translate(string.punctuation)
+    word_no_punc = word.translate(word.maketrans('', '', string.punctuation))
     if (
         word_no_punc in acronyms or 
         contains(word, {"&", "/"}) or
