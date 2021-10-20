@@ -268,6 +268,16 @@ parser.add_argument(
     type=str,
     help="path to bibtex file"
 )
+
+parser.add_argument(
+    "style",
+    type=str,
+    nargs="?",
+    help="the style",
+    default="aer",
+    choices=["aer"]
+)
+
 parser.add_argument(
     "-q",
     "--quiet",
@@ -441,11 +451,12 @@ def gen_report() -> None:
 def escape_latex_chars(field: str) -> str:
     return None
 
-def main(filepath=args.filepath, quiet=args.quiet):
-    with open(filepath, encoding="utf8") as bib:
+def main(filepath=args.filepath, quiet=args.quiet, style=args.style):
+    file = Path(filepath)
+    with open(file, encoding="utf8") as bib:
         bib_db = bibtexparser.load(bib)
 
-    style_dict, fields_to_titlecase = open_style_guide("aer")
+    style_dict, fields_to_titlecase = open_style_guide(style)
     bib_db.entries = combine_duplicate_entries(bib_db.entries)
 
     for entry in bib_db.entries:
@@ -481,8 +492,8 @@ def main(filepath=args.filepath, quiet=args.quiet):
             correct_field = " ".join(corrected_list)
             entry.update({field: correct_field})
 
-    newfilename = f"{Path(filepath).stem}_cleaned.bib"
-    newpath = Path(filepath).parent / newfilename
+    newfilename = f"{file.stem}_cleaned.bib"
+    newpath = file.parent / newfilename
     with open(newpath, "w", encoding="utf8") as f:
         bibtexparser.dump(bib_db, f)
 
