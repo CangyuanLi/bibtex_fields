@@ -18,8 +18,6 @@ Python script to clean bibtex files. Relies on bibtexparser.
 
 # TODO:
 
-* CLI functionality
-* Better acronym handling
 * Better pretty-printing
 * Colored terminal output (colorama)
 * Additional styles
