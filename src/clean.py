@@ -142,6 +142,7 @@ prepositions = {
 
 acronyms = {
     "aer",
+    "esg",
     "qje",
     "jel",
     "jpe",
@@ -189,6 +190,7 @@ acronyms = {
     "ira",
     "llc",
     "loi",
+    "mit",
     "mlb",
     "mmkt",
     "mtd",
@@ -219,6 +221,7 @@ acronyms = {
     "sba",
     "sbo",
     "sec",
+    "sif",
     "siv",
     "tsa",
     "tsr",
@@ -250,9 +253,8 @@ valid_two_letter_words = {
     "so",
     "to",
     "up",
-    "us",
     "we"
-}
+} # no "us" because in title it is much more likely to refer to "US"
 
 duplicate_entries = []
 invalid_entry_types = []
@@ -354,7 +356,7 @@ def is_acronym(word: str) -> bool:
 def lowercase_after_dash(word: str, dash_pos: int):
     before_dash = word[:dash_pos + 1].title()
     after_dash = word[dash_pos + 2:]
-    
+
     return before_dash + word[dash_pos + 1].lower() + after_dash
 
 def clean_and_split(field: str) -> list:
@@ -476,13 +478,13 @@ def main(filepath=args.filepath, quiet=args.quiet, style=args.style):
                 if is_article(word) or is_conjuction(word) or is_preposition(word):
                     correct_word = word.lower()
                 else:
-                    correct_word = word.title()
+                    correct_word = word.capitalize()
 
-                if idx in {0, len(word_list) - 1} or word_list[idx - 1][-1] in {":", "?", "!", ".", "--"}:
-                    correct_word = word.title()
+                if idx in {0, len(word_list) - 1} or word_list[idx - 1][-1] in {":", "?", "!", ".", "--", "-"}:
+                    correct_word = word.capitalize()
                 if is_acronym(word):
                     correct_word = word.upper()
-                if "-" in word:
+                if "-" in word and word[-1] != "-":
                     dash_pos = word.index("-")
                     correct_word = lowercase_after_dash(word, dash_pos)
                 

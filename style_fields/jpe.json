@@ -1,0 +1,183 @@
+{
+    "article": {
+        "required": [
+            "author",
+            "journal",
+            "year",
+            "title"
+        ],
+        "optional": [
+            "note",
+            "number",
+            "pages",
+            "volume"
+        ]
+    },
+    "book": {
+        "required": [
+            "author",
+            "title",
+            "year"
+        ],
+        "optional": [
+            "address",
+            "publisher",
+            "edition",
+            "editor",
+            "series"
+        ]
+    },
+    "booklet": {
+        "required": [
+            "author",
+            "title",
+            "year"
+        ],
+        "optional": [
+            "address",
+            "howpublished",
+            "note"
+        ]
+    },
+    "inbook": {
+        "required": [
+            "author",
+            "title",
+            "year"
+        ],
+        "optional": [
+            "address",
+            "chapter",
+            "edition",
+            "editor",
+            "note",
+            "pages",
+            "publisher",
+            "series",
+            "volume"
+        ]
+    },
+    "incollection": {
+        "required": [
+            "author",
+            "booktitle",
+            "title",
+            "year"
+        ],
+        "optional": [
+            "address",
+            "chapter",
+            "edition",
+            "editor",
+            "note",
+            "pages",
+            "publisher"
+        ]
+    },
+    "inproceedings": {
+        "required": [
+            "author",
+            "booktitle",
+            "title",
+            "year"
+        ],
+        "optional": [
+            "address",
+            "editor",
+            "note",
+            "organization",
+            "pages",
+            "volume"
+        ]
+    },
+    "mastersthesis": {
+        "required": [
+            "author",
+            "school",
+            "title",
+            "year"
+        ],
+        "optional": [
+            "address",
+            "note"
+        ]
+    },
+    "manual": {
+        "required": [
+            "author",
+            "organiztion",
+            "title",
+            "year"
+        ],
+        "optional": [
+            "edition",
+            "note"
+        ]
+    },
+    "misc": {
+        "required": [
+            "author",
+            "title",
+            "year"
+        ],
+        "optional": [
+            "howpublished",
+            "note"
+        ]
+    },
+    "phdthesis": {
+        "required": [
+            "author",
+            "school",
+            "title",
+            "year"
+        ],
+        "optional": [
+            "address",
+            "note"
+        ]
+    },
+    "proceedings": {
+        "required": [
+            "author",
+            "organization",
+            "title",
+            "year"
+        ],
+        "optional": [
+            "address",
+            "note",
+            "publisher",
+            "volume"
+        ]
+    },
+    "techreport": {
+        "required": [
+            "author",
+            "title",
+            "year"
+        ],
+        "optional": [
+            "address",
+            "note",
+            "number",
+            "publisher"
+        ]
+    },
+    "unpublished": {
+        "required": [
+            "author",
+            "title",
+            "year"
+        ],
+        "optional": [
+            "note"
+        ]
+    },
+    "FIELDS_TO_TITLECASE": [
+        "booktitle",
+        "journal",
+        "publisher",
+        "title"
+    ]
+}
