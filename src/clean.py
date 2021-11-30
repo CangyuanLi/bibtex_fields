@@ -189,6 +189,7 @@ acronyms = {
     "ipo",
     "ira",
     "llc",
+    "lbo",
     "loi",
     "mit",
     "mlb",
@@ -291,6 +292,13 @@ args = parser.parse_args()
 
 # functions
 
+def find_last_index(str: str, target: str):
+    for i in range(len(str) - 1, -1, -1):
+        if str[i] == target:
+            return i
+
+    return None
+
 def contains(string: str, elements: set) -> bool:
     return any(elem in string for elem in elements)
 
@@ -320,26 +328,26 @@ def combine_duplicate_entries(bib: list) -> list:
 def is_article(word: str) -> bool:
     if word in articles:
         return True
-    else:
-        return False
+
+    return False
 
 def is_conjuction(word: str) -> bool:
     if word in conjunctions:
         return True
-    else:
-        return False
+
+    return False
 
 def is_preposition(word: str) -> bool:
     if word in prepositions:
         return True
-    else:
-        return False
+        
+    return False
 
 def between_parantheses(word: str) -> bool:
     if word[0] == "(" and word[-1] == ")" and len(word) <= 4:
         return True
-    else:
-        return False
+
+    return False
 
 def is_acronym(word: str) -> bool:
     word_no_punc = word.translate(word.maketrans('', '', string.punctuation))
@@ -350,8 +358,17 @@ def is_acronym(word: str) -> bool:
         len(word_no_punc) == 2 and word_no_punc not in valid_two_letter_words
     ):
         return True
-    else:
-        return False
+
+    return False
+
+def is_plural_acronym(word: str) -> bool:
+    plural_acronyms = {acro + "s" for acro in acronyms}
+    word_no_punc = word.translate(word.maketrans('', '', string.punctuation))
+    
+    if word_no_punc in plural_acronyms:
+        return True
+        
+    return False
 
 def lowercase_after_dash(word: str, dash_pos: int):
     before_dash = word[:dash_pos + 1].title()
@@ -484,6 +501,9 @@ def main(filepath=args.filepath, quiet=args.quiet, style=args.style):
                     correct_word = word.capitalize()
                 if is_acronym(word):
                     correct_word = word.upper()
+                if is_plural_acronym(word):
+                    last_s = find_last_index(word, "s")
+                    correct_word = word[:last_s].upper() + "s" + word[last_s + 1:].upper()
                 if "-" in word and word[-1] != "-":
                     dash_pos = word.index("-")
                     correct_word = lowercase_after_dash(word, dash_pos)
