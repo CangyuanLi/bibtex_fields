@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # imports
 
 import argparse
