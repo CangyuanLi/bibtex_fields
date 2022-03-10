@@ -471,6 +471,25 @@ def gen_report() -> None:
 def escape_latex_chars(field: str) -> str:
     return None
 
+def get_correct_word(idx: int, word: str, word_list: list[str]) -> str:
+    if is_article(word) or is_conjuction(word) or is_preposition(word):
+        correct_word = word.lower()
+    else:
+        correct_word = word.capitalize()
+
+    if idx in {0, len(word_list) - 1} or word_list[idx - 1][-1] in {":", "?", "!", ".", "--", "-"}:
+        correct_word = word.capitalize()
+    if is_acronym(word):
+        correct_word = word.upper()
+    if is_plural_acronym(word):
+        last_s = find_last_index(word, "s")
+        correct_word = word[:last_s].upper() + "s" + word[last_s + 1:].upper()
+    if "-" in word and word[-1] != "-":
+        dash_pos = word.index("-")
+        correct_word = lowercase_after_dash(word, dash_pos)
+
+    return correct_word
+
 def main(filepath=args.filepath, quiet=args.quiet, style=args.style):
     file = Path(filepath)
     with open(file, encoding="utf8") as bib:
@@ -494,21 +513,7 @@ def main(filepath=args.filepath, quiet=args.quiet, style=args.style):
 
             corrected_list = []
             for idx, word in enumerate(word_list):
-                if is_article(word) or is_conjuction(word) or is_preposition(word):
-                    correct_word = word.lower()
-                else:
-                    correct_word = word.capitalize()
-
-                if idx in {0, len(word_list) - 1} or word_list[idx - 1][-1] in {":", "?", "!", ".", "--", "-"}:
-                    correct_word = word.capitalize()
-                if is_acronym(word):
-                    correct_word = word.upper()
-                if is_plural_acronym(word):
-                    last_s = find_last_index(word, "s")
-                    correct_word = word[:last_s].upper() + "s" + word[last_s + 1:].upper()
-                if "-" in word and word[-1] != "-":
-                    dash_pos = word.index("-")
-                    correct_word = lowercase_after_dash(word, dash_pos)
+                correct_word = get_correct_word(idx, word, word_list)
                 
                 corrected_list.append(correct_word)
                 
@@ -520,7 +525,7 @@ def main(filepath=args.filepath, quiet=args.quiet, style=args.style):
     with open(newpath, "w", encoding="utf8") as f:
         bibtexparser.dump(bib_db, f)
 
-    if quiet == False:
+    if quiet is False:
         gen_report()
 
 if __name__ == "__main__":
