@@ -468,8 +468,15 @@ def gen_report() -> None:
         outlist=invalid_fields
     )
     
-def escape_latex_chars(field: str) -> str:
-    return None
+def escape_latex_chars(string: str) -> str:
+    charlist = []
+    for char in string:
+        if char in {"\\", "_", "%"}:
+            char = "\\" + char
+        
+        charlist.append(char)
+
+    return "".join(charlist)
 
 def get_correct_word(idx: int, word: str, word_list: list[str]) -> str:
     if is_article(word) or is_conjuction(word) or is_preposition(word):
@@ -487,6 +494,8 @@ def get_correct_word(idx: int, word: str, word_list: list[str]) -> str:
     if "-" in word and word[-1] != "-":
         dash_pos = word.index("-")
         correct_word = lowercase_after_dash(word, dash_pos)
+
+    correct_word = escape_latex_chars(correct_word)
 
     return correct_word
 
