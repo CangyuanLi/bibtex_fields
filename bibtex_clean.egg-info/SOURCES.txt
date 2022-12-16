@@ -1,0 +1,13 @@
+README.md
+setup.py
+bibtex_clean/__init__.py
+bibtex_clean/clean.py
+bibtex_clean/cli.py
+bibtex_clean/hardcoded_words.py
+bibtex_clean/temp.py
+bibtex_clean/title_styler.py
+bibtex_clean.egg-info/PKG-INFO
+bibtex_clean.egg-info/SOURCES.txt
+bibtex_clean.egg-info/dependency_links.txt
+bibtex_clean.egg-info/entry_points.txt
+bibtex_clean.egg-info/top_level.txt

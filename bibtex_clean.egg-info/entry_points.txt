@@ -1,0 +1,2 @@
+[console_scripts]
+bibtex_clean = bibtex_clean.cli:main
