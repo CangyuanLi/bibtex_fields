@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="bibtex_clean",
-    version="0.0.2",
+    version="0.0.3",
     author="Cangyuan Li",
     author_email="everest229@gmail.com",
     description="CLI utility to clean bibtex files.",

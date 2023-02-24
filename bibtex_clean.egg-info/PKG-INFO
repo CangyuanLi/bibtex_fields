@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: bibtex-clean
-Version: 0.0.2
+Version: 0.0.3
 Summary: CLI utility to clean bibtex files.
 Home-page: https://github.com/CangyuanLi/bibtex_fields
 Author: Cangyuan Li
