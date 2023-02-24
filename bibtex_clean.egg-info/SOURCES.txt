@@ -1,3 +1,4 @@
+MANIFEST.in
 README.md
 setup.py
 bibtex_clean/__init__.py
@@ -10,4 +11,17 @@ bibtex_clean.egg-info/PKG-INFO
 bibtex_clean.egg-info/SOURCES.txt
 bibtex_clean.egg-info/dependency_links.txt
 bibtex_clean.egg-info/entry_points.txt
+bibtex_clean.egg-info/requires.txt
 bibtex_clean.egg-info/top_level.txt
+bibtex_clean/__pycache__/__init__.cpython-310.pyc
+bibtex_clean/__pycache__/__init__.cpython-311.pyc
+bibtex_clean/__pycache__/clean.cpython-310.pyc
+bibtex_clean/__pycache__/clean.cpython-311.pyc
+bibtex_clean/__pycache__/cli.cpython-310.pyc
+bibtex_clean/__pycache__/cli.cpython-311.pyc
+bibtex_clean/__pycache__/hardcoded_words.cpython-310.pyc
+bibtex_clean/__pycache__/hardcoded_words.cpython-311.pyc
+bibtex_clean/__pycache__/title_styler.cpython-310.pyc
+bibtex_clean/__pycache__/title_styler.cpython-311.pyc
+bibtex_clean/style_fields/aer.json
+bibtex_clean/style_fields/jpe.json

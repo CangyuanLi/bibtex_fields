@@ -2,12 +2,18 @@ import setuptools
 
 setuptools.setup(
     name="bibtex_clean",
-    version="0.0.1",
+    version="0.0.2",
     author="Cangyuan Li",
     author_email="everest229@gmail.com",
     description="CLI utility to clean bibtex files.",
     url="https://github.com/CangyuanLi/bibtex_fields",
     packages=["bibtex_clean"],
+    include_package_data=True,
+    install_requires=[
+        "bibtexparser",
+        "colorama",
+        "pycutils",
+    ],
     entry_points={
         "console_scripts": [
             "bibtex_clean=bibtex_clean.cli:main"
