@@ -143,7 +143,7 @@ def clean_file(filepath, style, quiet):
 
     error_list = []
     for entry in bib_db.entries:
-        entry["ID"] = entry["ID"].lower()
+        # entry["ID"] = entry["ID"].lower()
         entry["ENTRYTYPE"] = entry["ENTRYTYPE"].lower()
         error_dict = validate_entry(style_dict=style_dict, entry=entry)
         error_list.append(error_dict)
