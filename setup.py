@@ -2,11 +2,11 @@ import setuptools
 
 with open("bibtex_clean/_version.py") as f:
     lines = f.readlines()
-    version = lines[0].strip("\n").split("=")[1].strip()
+    version = lines[0].strip("\n").split()[-1].strip("\"'")
 
 setuptools.setup(
     name="bibtex_clean",
-    version="0.0.5",
+    version=version,
     author="Cangyuan Li",
     author_email="everest229@gmail.com",
     description="CLI utility to clean bibtex files.",
