@@ -159,9 +159,8 @@ def clean_file(filepath: str, outpath: str, style: Literal["aer"], quiet: bool):
             entry.update({field: correct_field})
 
     if outpath is None:
-        outpath = f"{file.stem}_cleaned.bib"
-    newpath = file.parent / outpath
-    with open(newpath, "w", encoding="utf8") as f:
+        outpath = file.parent / f"{file.stem}_cleaned.bib"
+    with open(outpath, "w", encoding="utf8") as f:
         bibtexparser.dump(bib_db, f)
 
     report_dict = {

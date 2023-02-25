@@ -14,13 +14,14 @@ def get_parser():
 
     parser.add_argument(
         "outpath",
+        nargs="?",
         type=str,
         default=None,
         help="path to new bibtex file"
     )
 
     parser.add_argument(
-        "style",
+        "-style",
         type=str,
         nargs="?",
         help="the journal style, currently only aer is implemented",
@@ -41,7 +42,7 @@ def get_parser():
         "--version",
         action="version",
         version="%(prog)s {version}".format(version=__version__),
-        help="version"
+        help="displays package version"
     )
 
     return parser
