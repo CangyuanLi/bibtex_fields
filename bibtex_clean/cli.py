@@ -40,7 +40,6 @@ def get_parser():
         "-v",
         "--version",
         action="version",
-        required=False,
         version="%(prog)s {version}".format(version=__version__),
         help="version"
     )
