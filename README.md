@@ -1,4 +1,9 @@
-Tired of going through your bibtex files and manually applying weird title rules? Is the file getting messy, with many duplicate entries, missing or invalid fields? Bibtex_clean (bibtex_clean) is a CLI tool to clean bibtex files.
+# bibtex_clean: simple way to format and validate .bib files
+![PyPI - Downloads](https://img.shields.io/pypi/dm/bibtex_clean)
+
+## What is it?
+
+Tired of going through your bibtex files and manually applying weird title rules? Is the file getting messy, with many duplicate entries, missing or invalid fields? **bibtex_clean** is a CLI tool to clean bibtex files.
 
 # Supported Rules:
 
@@ -18,9 +23,10 @@ Tired of going through your bibtex files and manually applying weird title rules
 
 # Usage:
 
-## Requirements
+## Dependencies
 
-A valid Python 3 installation.
+- [bibtexparser - Parses your bibtex file]
+- [colorama - Pretty terminal output]
 
 ## Installing
 
@@ -34,17 +40,23 @@ pip install bibtex_clean
 
 After installation, a bibtex_clean command should be exposed to anywhere on the command line.
 
-```
-bibtex_clean ./path/to/your/file
+```shell
+bibtex_clean /path/to/your/file
 ```
 
 Will then output a file named "yourfile_clean.bib" in the same directory as your file. By default, bibtex_clean follows the AER style guide and uses Chicago Title Case. In the future, command line switches in the style of
 
-```
-bibtex_clean ./path/to/your/file -style="{style}"
+```shell
+bibtex_clean /path/to/your/file -style="{style}"
 ```
 
 will be supported.
+
+To specify the name of the cleaned .bib file, simply do
+
+```shell
+bibtex_clean /path/to/your/file /path/to/new/file
+```
 
 # TODO:
 
