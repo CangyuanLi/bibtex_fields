@@ -6,6 +6,7 @@
 **/.pytest_cache
 **/venv
 **/.tox
+**/tests
 
 **/pycutils.egg-info
 
