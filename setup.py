@@ -6,7 +6,7 @@ with open("bibtex_clean/_version.py") as f:
 
 setuptools.setup(
     name="bibtex_clean",
-    version=version,
+    version="0.0.5",
     author="Cangyuan Li",
     author_email="everest229@gmail.com",
     description="CLI utility to clean bibtex files.",

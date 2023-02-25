@@ -2,6 +2,7 @@ MANIFEST.in
 README.md
 setup.py
 bibtex_clean/__init__.py
+bibtex_clean/_version.py
 bibtex_clean/clean.py
 bibtex_clean/cli.py
 bibtex_clean/hardcoded_words.py
@@ -14,6 +15,7 @@ bibtex_clean.egg-info/requires.txt
 bibtex_clean.egg-info/top_level.txt
 bibtex_clean/__pycache__/__init__.cpython-310.pyc
 bibtex_clean/__pycache__/__init__.cpython-311.pyc
+bibtex_clean/__pycache__/_version.cpython-311.pyc
 bibtex_clean/__pycache__/clean.cpython-310.pyc
 bibtex_clean/__pycache__/clean.cpython-311.pyc
 bibtex_clean/__pycache__/cli.cpython-310.pyc
