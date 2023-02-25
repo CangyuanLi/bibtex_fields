@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from typing import Literal
 
 import bibtexparser
 import colorama
@@ -133,7 +134,7 @@ def gen_report(report_dict: dict) -> None:
         outlist=report_dict["invalid_fields"]
     )
 
-def clean_file(filepath, style, quiet):
+def clean_file(filepath: str, outpath: str, style: Literal["aer"], quiet: bool):
     file = Path(filepath)
     with open(file, encoding="utf8") as bib:
         bib_db = bibtexparser.load(bib)
@@ -157,8 +158,9 @@ def clean_file(filepath, style, quiet):
             correct_field = ChicagoStyle(field_content).get_correct_title()
             entry.update({field: correct_field})
 
-    newfilename = f"{file.stem}_cleaned.bib"
-    newpath = file.parent / newfilename
+    if outpath is None:
+        outpath = f"{file.stem}_cleaned.bib"
+    newpath = file.parent / outpath
     with open(newpath, "w", encoding="utf8") as f:
         bibtexparser.dump(bib_db, f)
 
@@ -172,5 +174,5 @@ def clean_file(filepath, style, quiet):
         for k in error_dict:
             report_dict[k] += error_dict[k]
             
-    if quiet is False:
+    if not quiet:
         gen_report(report_dict)

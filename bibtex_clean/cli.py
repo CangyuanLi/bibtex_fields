@@ -4,6 +4,7 @@ from .clean import clean_file
 
 def get_parser():
     parser = argparse.ArgumentParser(description="Clean bibtex file")
+
     parser.add_argument(
         "filepath",
         type=str,
@@ -11,10 +12,17 @@ def get_parser():
     )
 
     parser.add_argument(
+        "outpath",
+        type=str,
+        default=None,
+        help="path to new bibtex file"
+    )
+
+    parser.add_argument(
         "style",
         type=str,
         nargs="?",
-        help="the journal style, aer or jpe",
+        help="the journal style, currently only aer is implemented",
         default="aer",
         choices=["aer"]
     )
@@ -34,6 +42,7 @@ def main():
     
     clean_file(
         filepath=args.filepath,
+        outpath=args.outpath,
         style=args.style,
         quiet=args.quiet
     )
