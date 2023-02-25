@@ -1,7 +1,7 @@
 import argparse
 
 from .clean import clean_file
-from .__init__ import __version__
+from ._version import __version__
 
 def get_parser():
     parser = argparse.ArgumentParser(description="Clean bibtex file")
