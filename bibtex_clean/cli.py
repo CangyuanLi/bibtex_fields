@@ -1,6 +1,7 @@
 import argparse
 
 from .clean import clean_file
+from .__init__ import __version__
 
 def get_parser():
     parser = argparse.ArgumentParser(description="Clean bibtex file")
@@ -33,6 +34,15 @@ def get_parser():
         action="store_true",
         required=False,
         help="suppresses output"
+    )
+
+    parser.add_argument(
+        "-v",
+        "--version",
+        action="version",
+        required=False,
+        version="%(prog)s {version}".format(version=__version__),
+        help="version"
     )
 
     return parser
