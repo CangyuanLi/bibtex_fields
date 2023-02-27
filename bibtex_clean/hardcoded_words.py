@@ -124,6 +124,7 @@ PREPOSITIONS = {
 }
 
 ACRONYMS = {
+    "tfp",
     "opex",
     "gaap",
     "fasb",
